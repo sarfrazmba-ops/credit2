@@ -1,16 +1,28 @@
 import os
+import sys
+import subprocess
+from pathlib import Path
+
 import pandas as pd
 import joblib
 import streamlit as st
 
-DATA_PATH = "credit.csv"
-MODEL_PATH = "credit_approval_model.joblib"
+BASE_DIR = Path(__file__).resolve().parent
+DATA_PATH = BASE_DIR / "credit.csv"
+MODEL_PATH = BASE_DIR / "credit_approval_model.joblib"
 
 st.set_page_config(page_title="Credit Approval Predictor", page_icon="💳", layout="wide")
 st.title("Credit Approval Predictor")
 st.write("Enter the applicant information to get a credit approval prediction.")
 
-if not os.path.exists(MODEL_PATH):
+if not MODEL_PATH.exists():
+    try:
+        subprocess.run([sys.executable, str(BASE_DIR / "train_model.py")], cwd=BASE_DIR, check=True)
+    except subprocess.CalledProcessError:
+        st.error("The model could not be created automatically. Please run: python train_model.py")
+        st.stop()
+
+if not MODEL_PATH.exists():
     st.error("Model file not found. Train it first by running: python train_model.py")
     st.stop()
 

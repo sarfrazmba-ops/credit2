@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+
 import pandas as pd
 import joblib
 from sklearn.model_selection import train_test_split
@@ -11,8 +13,9 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 
-DATA_PATH = "credit.csv"
-MODEL_PATH = "credit_approval_model.joblib"
+BASE_DIR = Path(__file__).resolve().parent
+DATA_PATH = BASE_DIR / "credit.csv"
+MODEL_PATH = BASE_DIR / "credit_approval_model.joblib"
 
 
 def main():
